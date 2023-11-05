@@ -1,3 +1,4 @@
+import 'package:cars_manager/app_screens/drawer.dart';
 import 'package:flutter/material.dart';
 
 class AccueilScreen extends StatelessWidget {
@@ -6,6 +7,7 @@ class AccueilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const NavigationDrawer(),
       appBar: AppBar(
         title: const Text('Accueil'),
       ),
