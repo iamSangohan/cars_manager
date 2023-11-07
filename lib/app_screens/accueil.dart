@@ -12,72 +12,122 @@ class AccueilScreen extends StatelessWidget {
       drawer: const FenetreNavigation(),
       appBar: AppBar(
         title: const Text('Accueil'),
+        shadowColor: Colors.transparent,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Row(
-            // Ligne avec les informations de l'utilisateur
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('NOM : ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text("MENSAH Luc", style: TextStyle(fontSize: 18)),
-            ],
+          Container(
+            height: 300.0,
+            color: Colors.transparent,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40.0),
+                  bottomRight: Radius.circular(40.0),
+                )
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    // Ligne avec les informations de l'utilisateur
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('NOM : ', 
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 24,
+                          fontFamily: 'Roboto',
+                          color: Colors.white
+                        )
+                      ),
+                      Text("MENSAH Luc", 
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontFamily: 'Roboto',
+                          color: Colors.white
+                        )
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    // Ligne avec les informations sur le vehicule de l'utilisateur
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Vehicule No : ', 
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 24,
+                          fontFamily: 'Roboto',
+                          color: Colors.white
+                        )
+                      ),
+                      Text("AB-100-AB", 
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontFamily: 'Roboto',
+                          color: Colors.white
+                        )
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 20),
-          const Row(
-            // Ligne avec les informations sur le vehicule de l'utilisateur
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Vehicule No : ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              Text("AB-100-AB", style: TextStyle(fontSize: 18)),
-            ],
-          ),
-          const SizedBox(height: 50),
-          Row(
+          const SizedBox(height: 70),
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Deux boutons de meme taille au centre avec une image dans chaque bouton pour Incidents et Approvisionnements
-              Expanded(
-                child: SizedBox(
-                  height: 150,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const IncidentIndex(),
-                        ));
-                      },
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.car_repair, size: 40),
-                          Text('Incidents', style: TextStyle(fontSize: 16)),
-                        ],
-                      ),
+              SizedBox(
+                height: 150,
+                width: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[900],
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const IncidentIndex(),
+                      ));
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.car_repair, size: 40),
+                        Text('Incidents', style: TextStyle(fontSize: 16)),
+                      ],
                     ),
                   ),
                 ),
               ),
-              Expanded(
-                child: SizedBox(
-                  height: 150,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ApprovisIndex(),
-                        ));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.local_gas_station, size: 40),
-                          Text('Approvisionnements', style: TextStyle(fontSize: 16)),
-                        ],
-                      ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 150,
+                width: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[900],
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ApprovisIndex(),
+                      ));
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.local_gas_station, size: 40),
+                        Text('Approvisionnements', style: TextStyle(fontSize: 16)),
+                      ],
                     ),
                   ),
                 ),
