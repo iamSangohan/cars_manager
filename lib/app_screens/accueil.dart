@@ -1,4 +1,6 @@
 import 'package:cars_manager/app_screens/drawer.dart';
+import 'package:cars_manager/app_screens/indexApprovis.dart';
+import 'package:cars_manager/app_screens/indexIncident.dart';
 import 'package:flutter/material.dart';
 
 class AccueilScreen extends StatelessWidget {
@@ -7,26 +9,26 @@ class AccueilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawer(),
+      drawer: const FenetreNavigation(),
       appBar: AppBar(
         title: const Text('Accueil'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
+          const Row(
             // Ligne avec les informations de l'utilisateur
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text('NOM : ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text("MENSAH Luc", style: TextStyle(fontSize: 18)),
             ],
           ),
           const SizedBox(height: 20),
-          Row(
+          const Row(
             // Ligne avec les informations sur le vehicule de l'utilisateur
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text('Vehicule No : ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               Text("AB-100-AB", style: TextStyle(fontSize: 18)),
             ],
@@ -43,11 +45,13 @@ class AccueilScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to second route when tapped.
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const IncidentIndex(),
+                        ));
                       },
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.car_repair, size: 40),
                           Text('Incidents', style: TextStyle(fontSize: 16)),
                         ],
@@ -63,7 +67,9 @@ class AccueilScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to second route when tapped.
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ApprovisIndex(),
+                        ));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

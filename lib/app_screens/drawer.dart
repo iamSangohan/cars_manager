@@ -2,14 +2,14 @@ import 'package:cars_manager/app_screens/accueil.dart';
 import 'package:cars_manager/app_screens/parametre.dart';
 import 'package:flutter/material.dart';
 
-class NavigationDrawer extends StatefulWidget {
-  const NavigationDrawer({super.key});
+class FenetreNavigation extends StatefulWidget {
+  const FenetreNavigation({super.key});
 
   @override
-  State<NavigationDrawer> createState() => _NavigationDrawerState();
+  State<FenetreNavigation> createState() => _FenetreNavigationState();
 }
 
-class _NavigationDrawerState extends State<NavigationDrawer> {
+class _FenetreNavigationState extends State<FenetreNavigation> {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
   
