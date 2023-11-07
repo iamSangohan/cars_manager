@@ -14,7 +14,7 @@ class _ParametreScreenState extends State<ParametreScreen> {
   Widget build(BuildContext context) {
     // UI de la page Parametre
     return Scaffold(
-      drawer: const NavigationDrawer(),
+      drawer: const FenetreNavigation(),
       appBar: AppBar(
         title: const Text('Parametre'),
       ),
