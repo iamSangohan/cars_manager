@@ -1,9 +1,14 @@
+import 'package:cars_manager/app_screens/accueil.dart';
 import 'package:cars_manager/app_screens/login.dart';
+import 'package:cars_manager/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  SplashScreen({super.key});
+
+  // Recuperer le token d'authentification de l'utilisateur
+  String? token = access_token;
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -18,7 +23,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
+        // Route vers la page de connexion si l'utilisateur n'est pas connecté
+        builder: (context) => widget.token == null ? const AccueilScreen() : const LoginScreen(),
       ));
     });
   }
