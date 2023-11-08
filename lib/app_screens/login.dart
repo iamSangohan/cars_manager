@@ -1,4 +1,5 @@
 import 'package:cars_manager/app_screens/accueil.dart';
+import 'package:cars_manager/services/api.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,6 +10,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
+  final APIService apiService = APIService();
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController mdpController = TextEditingController();
+
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const Text(
-                'veuillez vous connecter',
+                'Veuillez vous connecter',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -43,33 +52,55 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Nom d'utilisateur",
-                ),
-              ),
-              const SizedBox(height: 20),
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Mot de passe',
-                ),
+              Form(
+                key: _formStateKey,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: usernameController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Nom d'utilisateur",
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: mdpController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Mot de passe',
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    SizedBox(
+                      width: 125,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          //Exécutez la fonction login dans api.dart
+                          if (_formStateKey.currentState!.validate()) {
+                            final username = usernameController.text;
+                            final password = mdpController.text;
+                            final result = await apiService.login(username, password);
 
-              ),
-              const SizedBox(height: 40),
-              SizedBox(
-                width: 125,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const AccueilScreen()),
-                    );
-                  },
-                  child: const Text('Login'),
+                            if (result != null) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const AccueilScreen(),
+                              ));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Erreur de connexion. Vérifiez vos identifiants.'),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text('Login'),
+                      ),
+                    )
+                  ],
                 ),
               )
             ],
