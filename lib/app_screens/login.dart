@@ -78,19 +78,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () async {
-                          //Exécutez la fonction login dans api.dart
                           if (_formStateKey.currentState!.validate()) {
                             final username = usernameController.text;
                             final password = mdpController.text;
                             final result = await apiService.login(username, password);
 
-                            if (result != null) {
+                            if (result == 201) {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const AccueilScreen(),
                               ));
                             } else {
+                              usernameController.text = "";
+                              mdpController.text = "";
+
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text('Erreur de connexion. Vérifiez vos identifiants.'),
                                 ),
                               );
@@ -98,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         },
                         child: const Text('Login'),
-                      ),
+                      ), 
                     )
                   ],
                 ),
