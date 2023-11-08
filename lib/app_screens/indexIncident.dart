@@ -15,6 +15,7 @@ class _IncidentIndexState extends State<IncidentIndex> {
     // Listview vertical avec un builder
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.blue[900],
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const IncidentForm(),

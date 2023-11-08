@@ -14,6 +14,7 @@ class _ApprovisIndexState extends State<ApprovisIndex> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.blue[900],
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const ApprovisForm(),
