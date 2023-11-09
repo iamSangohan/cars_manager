@@ -1,32 +1,41 @@
+import 'package:flutter/material.dart';
 import 'package:cars_manager/app_screens/accueil.dart';
 import 'package:cars_manager/app_screens/login.dart';
-import 'package:cars_manager/constant.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
-
-  // Recuperer le token d'authentification de l'utilisateur
-  String? token = access_token;
+  SplashScreen({Key? key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);   
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    Future.delayed(const Duration(seconds: 3), () {
+    checkAuthenticationStatus();
+  }
+
+  Future<void> checkAuthenticationStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    // Vérifier si le token d'authentification existe
+    if (accessToken != null) {
+      // Rediriger vers l'écran d'accueil
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        // Route vers la page de connexion si l'utilisateur n'est pas connecté
-        builder: (context) => widget.token == null ? const AccueilScreen() : const LoginScreen(),
+        builder: (context) => AccueilScreen(),
       ));
-    });
+    } else {
+      // Rediriger vers l'écran de connexion
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ));
+    }
   }
 
   @override
@@ -39,17 +48,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: double.infinity, // full width
+        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.blue, Colors.green],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-          )
+          ),
         ),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.car_crash_sharp,
               size: 80,
