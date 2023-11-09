@@ -39,7 +39,9 @@ class _IncidentFormState extends State<IncidentForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ajouter un incident'),
+        title: const Text('Ajouter une reparation'),
+        backgroundColor: Colors.yellow,
+        foregroundColor: Colors.black,
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -92,7 +94,12 @@ class _IncidentFormState extends State<IncidentForm> {
                   width: 125,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // Vider les champs
+                      invoiceController.clear();
+                      descriptionController.clear();
+                      amountController.clear();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
@@ -104,7 +111,7 @@ class _IncidentFormState extends State<IncidentForm> {
                   width: 125,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Get the values from the controllers
                       String invoice = invoiceController.text;
                       String description = descriptionController.text;
@@ -123,7 +130,8 @@ class _IncidentFormState extends State<IncidentForm> {
                       // Call the API to add the approvisionnement
                       APIService apiService = APIService();
                       try {
-                        final result =  apiService.addReparation(reparation);
+                        final result = await apiService.addReparation(reparation);
+                        print(result);
                         if(result == 200){
                           // Approvisionnement added successfully
                           // Show a snackbar
@@ -137,8 +145,7 @@ class _IncidentFormState extends State<IncidentForm> {
                               builder: (context) => const IncidentIndex(),
                             ),
                           );
-                        }
-                        else{
+                        } else {
                           // There was an error adding the approvisionnement
                           // Show a snackbar
                           ScaffoldMessenger.of(context).showSnackBar(

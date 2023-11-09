@@ -39,6 +39,8 @@ class _ApprovisFormState extends State<ApprovisForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un approvisionnement'),
+        backgroundColor: Colors.yellow,
+        foregroundColor: Colors.black,
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -89,7 +91,11 @@ class _ApprovisFormState extends State<ApprovisForm> {
                   width: 125,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      invoiceController.clear();
+                      quantityController.clear();
+                      amountController.clear();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
@@ -101,7 +107,7 @@ class _ApprovisFormState extends State<ApprovisForm> {
                   width: 125,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Get the values from the controllers
                       String invoice = invoiceController.text;
                       int quantity = int.parse(quantityController.text);
@@ -120,7 +126,7 @@ class _ApprovisFormState extends State<ApprovisForm> {
                       // Call the API to add the approvisionnement
                       APIService apiService = APIService();
                       try {
-                        final result =  apiService.addProcurement(approvisionnement);
+                        final result = await apiService.addProcurement(approvisionnement);
                         if(result == 200){
                           // Approvisionnement added successfully
                           // Show a snackbar
