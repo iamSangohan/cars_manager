@@ -28,18 +28,19 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.car_crash_sharp,
-                size: 80,
-                color: Colors.blue,
-              ),
-              const SizedBox(height: 20),
+              // Ajouter le logo
+              // Image.asset(
+              //   'assets/images/logo_taxi.png',
+              //   width: 300,
+              //   height: 300,
+              // ),
+              // const SizedBox(height: 20),
               const Text(
                 'Bienvenue',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: Colors.black,
                 ),
               ),
               const Text(
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Color.fromARGB(255, 103, 109, 114),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 60),
               Form(
                 key: _formStateKey,
                 child: Column(
@@ -62,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(),
                         labelText: "Nom d'utilisateur",
                       ),
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 20),
                     TextField(
@@ -77,6 +79,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 125,
                       height: 50,
                       child: ElevatedButton(
+                        // Changer la couleur du bouton
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black, 
+                          backgroundColor: Colors.yellow,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
                         onPressed: () async {
                           if (_formStateKey.currentState!.validate()) {
                             final username = usernameController.text;
@@ -98,7 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           }
                         },
-                        child: const Text('Login'),
+                        child: const Text('Connexion', 
+                          style: TextStyle(fontSize: 16)
+                        ),
                       ), 
                     )
                   ],
