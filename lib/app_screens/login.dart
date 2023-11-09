@@ -85,10 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             if (result == 201) {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const AccueilScreen(),
+                                builder: (context) => AccueilScreen(),
                               ));
                             } else {
-                              usernameController.text = "";
                               mdpController.text = "";
 
                               ScaffoldMessenger.of(context).showSnackBar(
