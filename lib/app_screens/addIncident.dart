@@ -1,4 +1,8 @@
+import 'package:cars_manager/app_screens/indexIncident.dart';
+import 'package:cars_manager/models/reparation.dart';
+import 'package:cars_manager/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IncidentForm extends StatefulWidget {
   const IncidentForm({super.key});
@@ -8,6 +12,29 @@ class IncidentForm extends StatefulWidget {
 }
 
 class _IncidentFormState extends State<IncidentForm> {
+  TextEditingController invoiceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+
+  late String vehiculeId;
+  late String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    initAsyncOperations();
+  }
+
+  Future<void> initAsyncOperations() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      vehiculeId = prefs.getString('vehicule_id') ?? 'Aucun utilisateur';
+      userId = prefs.getString('user_id') ?? 'Aucun vehicule';
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,16 +54,18 @@ class _IncidentFormState extends State<IncidentForm> {
               
             ),
             const SizedBox(height: 50),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: invoiceController,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Numero de la facture',
               ),
               keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 20),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Reparation effectuee',
               ),
@@ -45,8 +74,9 @@ class _IncidentFormState extends State<IncidentForm> {
               maxLines: 5,
             ),
             const SizedBox(height: 20),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: amountController,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Montant de la facture',
               ),
@@ -74,7 +104,58 @@ class _IncidentFormState extends State<IncidentForm> {
                   width: 125,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // Get the values from the controllers
+                      String invoice = invoiceController.text;
+                      String description = descriptionController.text;
+                      double amount = double.parse(amountController.text);
+
+                      // Create an Approvisionnement object
+                      
+                      Reparation reparation = Reparation(
+                        invoice: invoice,
+                        description: description,
+                        amount: amount,
+                        vehiculeId: vehiculeId,
+                        userId: userId,
+                      );
+
+                      // Call the API to add the approvisionnement
+                      APIService apiService = APIService();
+                      try {
+                        final result =  apiService.addReparation(reparation);
+                        if(result == 200){
+                          // Approvisionnement added successfully
+                          // Show a snackbar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Reparation ajoutée avec succès.'),
+                            ),
+                          );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const IncidentIndex(),
+                            ),
+                          );
+                        }
+                        else{
+                          // There was an error adding the approvisionnement
+                          // Show a snackbar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Erreur lors de l\'ajout de la reparation.'),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erreur lors de l\'ajout de la reparation.'),
+                          ),
+                        );
+                      }
+                    },
                     child: const Text('Valider'),
                   ),
                 ),

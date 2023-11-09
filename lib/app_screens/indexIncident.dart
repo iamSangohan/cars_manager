@@ -1,5 +1,7 @@
 import 'package:cars_manager/app_screens/addIncident.dart';
 import 'package:cars_manager/app_screens/detailIcident.dart';
+import 'package:cars_manager/models/reparation.dart';
+import 'package:cars_manager/services/api.dart';
 import 'package:flutter/material.dart';
 
 class IncidentIndex extends StatefulWidget {
@@ -10,6 +12,15 @@ class IncidentIndex extends StatefulWidget {
 }
 
 class _IncidentIndexState extends State<IncidentIndex> {
+  APIService apiService = APIService();
+  late Future<List<Reparation>> repairsList;
+
+  @override
+  void initState() {
+    super.initState();
+    repairsList = apiService.getAllRepairsByVehicle();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Listview vertical avec un builder
@@ -26,24 +37,39 @@ class _IncidentIndexState extends State<IncidentIndex> {
       appBar: AppBar(
         title: const Text('Liste des incidents'),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text('Incident $index'),
-              subtitle: Text('Description de l\'incident $index'),
-              leading: const Icon(Icons.warning),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const IncidentDetail(),
-                ));
+      body: FutureBuilder<List<Reparation>>(
+        future: repairsList,
+        builder: (BuildContext context, AsyncSnapshot<List<Reparation>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                Reparation repair = snapshot.data![index];
+                return Card(
+                  child: ListTile(
+                    title: Text('Incident ${repair.description}'),
+                    subtitle: Text('Montant: ${repair.amount}'),
+                    leading: const Icon(Icons.warning),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const IncidentDetail(),
+                      ));
+                    },
+                  ),
+                );
               },
-            ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         },
-      ),
+      )
     );
   }
 }
