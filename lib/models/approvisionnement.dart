@@ -15,21 +15,21 @@ class Approvisionnement {
 
   factory Approvisionnement.fromJson(Map<String, dynamic> json) {
     return Approvisionnement(
-      invoice: json['invoice'],
       quantity: json['quantity'],
       amount: json['amount'],
-      vehiculeId: json['vehiculeId'],
-      userId: json['userId'],
+      invoice: json['invoice'] ?? '',
+      vehiculeId: json['vehicule'] != null ? json['vehicule']['id'] : '',
+      userId: json['user'] != null ? json['user']['id'] : '',
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['invoice'] = invoice;
-    data['quantity'] = quantity;
-    data['amount'] = amount;
-    data['vehiculeId'] = vehiculeId;
-    data['userId'] = userId;
+    data['invoice'] = this.invoice;
+    data['quantity'] = this.quantity;
+    data['amount'] = this.amount;
+    data['vehiculeId'] = this.vehiculeId;
+    data['userId'] = this.userId;
     return data;
   }
 }

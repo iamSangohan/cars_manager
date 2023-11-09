@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'package:cars_manager/constant.dart';
 import 'package:cars_manager/models/approvisionnement.dart';
@@ -9,9 +11,9 @@ import 'package:http/http.dart' as http;
 
 
 class APIService {
-  final String apiUrl = "http://api-mobile.yes-ivoire.com";
-  // 192.168.1.78
-  // 3000
+  final String apiUrl = 'http://api-mobile.yes-ivoire.com';
+  // final String apiUrl = "http://192.168.1.78:3000";
+
   
   // User API 
   Future<int> login(String email, String password) async {
@@ -51,13 +53,8 @@ class APIService {
           // Recuperer le vehicule et ajouter son id et son immatriculation dans SharedPreferences
           try {
             Vehicule vehicule = await getVehicule();
-            if (vehicule != null) {
-              await prefs.setString('vehicule_id', vehicule.id);
-              await prefs.setString('vehicule_immatriculation', vehicule.registration);
-            } else {
-              // Gérer le cas où getVehicule() renvoie null
-              // Peut-être afficher un message d'erreur ou prendre d'autres mesures nécessaires.
-            }
+            await prefs.setString('vehicule_id', vehicule.id);
+            await prefs.setString('vehicule_immatriculation', vehicule.registration);
           } catch (e) {
             // Gérer l'exception, par exemple, afficher un message d'erreur ou prendre des mesures appropriées.
             print('Erreur lors de la récupération du véhicule : $e');
@@ -96,18 +93,13 @@ class APIService {
     if (response.statusCode == 200){
       // Convertir la réponse JSON en liste
       var jsonData = jsonDecode(response.body) as List<dynamic>;
-
+      print(jsonData);
       // Vérifier si la liste n'est pas vide
       if (jsonData.isNotEmpty) {
-        // Vérifier si le premier élément de la liste contient la clé 'data'
-        if (jsonData.first.containsKey('data') && jsonData.first['data'] != null) {
-          // Récupérer le véhicule
-          final vehiculeMap = jsonData.first['data'] as Map<String, dynamic>;
-          final Vehicule vehicule = Vehicule.fromJson(vehiculeMap.values.last);
-          return vehicule;
-        } else {
-          throw Exception('La clé "data" est nulle ou inexistante dans la réponse JSON.');
-        }
+        // Récupérer le dernier véhicule
+        final vehiculeMap = jsonData.last;
+        final vehicule = Vehicule.fromJson(vehiculeMap);
+        return vehicule;
       } else {
         throw Exception('La liste est vide dans la réponse JSON.');
       }
@@ -127,7 +119,7 @@ class APIService {
       body: jsonEncode(approvisionnement.toJson()),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       // The procurement was added successfully
       return 200;
     } else {
@@ -147,7 +139,7 @@ class APIService {
       body: jsonEncode(reparation.toJson()),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       // La reparation a été ajoutée avec succès
       return 200;
     } else {
@@ -176,18 +168,13 @@ class APIService {
       // Vérifier si la liste n'est pas vide
       if (jsonData.isNotEmpty) {
         // Vérifier si le premier élément de la liste contient la clé 'data'
-        if (jsonData.first.containsKey('data') && jsonData.first['data'] != null) {
-          // Récupérer la liste des approvisionnements
-          final procurementsList = jsonData.first['data'] as List<dynamic>;
+        final procurementsList = jsonData;
           List<Approvisionnement> procurements = [];
           for (var procurementMap in procurementsList) {
             final procurement = Approvisionnement.fromJson(procurementMap);
             procurements.add(procurement);
           }
           return procurements;
-        } else {
-          throw Exception('La clé "data" est nulle ou inexistante dans la réponse JSON.');
-        }
       } else {
         throw Exception('La liste est vide dans la réponse JSON.');
       }
@@ -197,42 +184,36 @@ class APIService {
   }
 
 
-Future<List<Reparation>> getAllRepairsByVehicle() async {
-  // Récupérer l'id du véhicule de SharedPreferences
-  String vehicleId = await SharedPreferences.getInstance().then((prefs) => prefs.getString('vehicule_id')!);
-  
-  final response = await http.get(
-    Uri.parse('$apiUrl/vehicule/repair-vehicule/$vehicleId'),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': await SharedPreferences.getInstance().then((prefs) => prefs.getString('access_token')!),
-    },
-  );
+  Future<List<Reparation>> getAllRepairsByVehicle() async {
+    // Récupérer l'id du véhicule de SharedPreferences
+    String vehicleId = await SharedPreferences.getInstance().then((prefs) => prefs.getString('vehicule_id')!);
+    
+    final response = await http.get(
+      Uri.parse('$apiUrl/vehicule/repair-vehicule/$vehicleId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': await SharedPreferences.getInstance().then((prefs) => prefs.getString('access_token')!),
+      },
+    );
 
-  if (response.statusCode == 200) {
-    // Convertir la réponse JSON en liste
-    var jsonData = jsonDecode(response.body) as List<dynamic>;
+    if (response.statusCode == 200) {
+      // Convertir la réponse JSON en liste
+      var jsonData = jsonDecode(response.body) as List<dynamic>;
 
-    // Vérifier si la liste n'est pas vide
-    if (jsonData.isNotEmpty) {
-      // Vérifier si le premier élément de la liste contient la clé 'data'
-      if (jsonData.first.containsKey('data') && jsonData.first['data'] != null) {
-        // Récupérer la liste des réparations
-        final repairsList = jsonData.first['data'] as List<dynamic>;
-        List<Reparation> repairs = [];
-        for (var repairMap in repairsList) {
-          final repair = Reparation.fromJson(repairMap);
-          repairs.add(repair);
-        }
-        return repairs;
+      // Vérifier si la liste n'est pas vide
+      if (jsonData.isNotEmpty) {
+        final repairsList = jsonData;
+          List<Reparation> repairs = [];
+          for (var repairMap in repairsList) {
+            final repair = Reparation.fromJson(repairMap);
+            repairs.add(repair);
+          }
+          return repairs;
       } else {
-        throw Exception('La clé "data" est nulle ou inexistante dans la réponse JSON.');
+        throw Exception('La liste est vide. Aucune réparation n\'a été effectuée sur ce véhicule.');
       }
     } else {
-      throw Exception('La liste est vide. Aucune réparation n\'a été effectuée sur ce véhicule.');
+      throw Exception('Failed to load repairs from API');
     }
-  } else {
-    throw Exception('Failed to load repairs from API');
   }
-}
 }

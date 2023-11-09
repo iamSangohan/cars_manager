@@ -18,9 +18,9 @@ class Reparation {
     return Reparation(
       invoice: json['invoice'],
       description: json['description'],
-      amount: json['amount'],
-      vehiculeId: json['vehiculeId'],
-      userId: json['userId'],
+      amount: (json['amount'] as num).toDouble(),
+      vehiculeId: json['vehiculeId'] != null ? json['vehiculeId'] : '',
+      userId: json['userId'] != null ? json['userId'] : '',
     );
   }
 
