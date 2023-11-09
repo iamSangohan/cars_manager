@@ -25,7 +25,7 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
 
     return Drawer(
       child: Material(
-        color: Colors.blue,
+        color: Colors.yellow,
         child: ListView(
           // padding: padding,
           children: <Widget>[
@@ -53,8 +53,12 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
                       // Effacer les donnees de l'utilisateur
                       currentUser = null;
                       
-                      // Effacer le token de SharedPreferences
+                      // Effacer toutes les donnees de SharedPreferences
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('username'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('user_id'));
                       SharedPreferences.getInstance().then((prefs) => prefs.remove('access_token'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('vehicule_immatriculation'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('vehicule_id'));
 
                       // Route vers la page de connexion
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
