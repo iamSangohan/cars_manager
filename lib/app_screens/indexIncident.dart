@@ -19,6 +19,8 @@ class _IncidentIndexState extends State<IncidentIndex> {
   void initState() {
     super.initState();
     repairsList = apiService.getAllRepairsByVehicle();
+    // Mettre dans l'ordre decroissant
+    repairsList = repairsList.then((value) => value.reversed.toList());
   }
 
   @override
@@ -31,11 +33,15 @@ class _IncidentIndexState extends State<IncidentIndex> {
             builder: (context) => const IncidentForm(),
           ));
         },
-        label: const Text('Ajouter'),
-        icon: const Icon(Icons.add),
+        label: const Text('Ajouter', style: TextStyle(color: Colors.black)),
+        icon: const Icon(Icons.add, color: Colors.black),
+        backgroundColor: Colors.yellow,
+        foregroundColor: Colors.black,
       ),
       appBar: AppBar(
         title: const Text('Liste des incidents'),
+        backgroundColor: Colors.yellow,
+        foregroundColor: Colors.black,
       ),
       body: FutureBuilder<List<Reparation>>(
         future: repairsList,
@@ -49,13 +55,8 @@ class _IncidentIndexState extends State<IncidentIndex> {
                   child: ListTile(
                     title: Text('Incident ${repair.description}'),
                     subtitle: Text('Montant: ${repair.amount}'),
-                    leading: const Icon(Icons.warning),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const IncidentDetail(),
-                      ));
-                    },
+                    leading: const Icon(Icons.car_crash, color: Colors.black,),
+                    onTap: () {},
                   ),
                 );
               },

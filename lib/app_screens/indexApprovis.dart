@@ -19,6 +19,8 @@ class _ApprovisIndexState extends State<ApprovisIndex> {
   void initState() {
     super.initState();
     procurementsList = apiService.getAllProcurementsByVehicle();
+    // Mettre dans l'ordre decroissant
+    procurementsList = procurementsList.then((value) => value.reversed.toList());
   }
 
   @override
@@ -30,11 +32,14 @@ class _ApprovisIndexState extends State<ApprovisIndex> {
             builder: (context) => const ApprovisForm(),
           ));
         },
-        label: const Text('Ajouter'),
-        icon: const Icon(Icons.add),
+        label: const Text('Ajouter', style: TextStyle(color: Colors.black)),
+        icon: const Icon(Icons.add, color: Colors.black),
+        backgroundColor: Colors.yellow,
       ),
       appBar: AppBar(
         title: const Text('Liste des approvisionnements'),
+        backgroundColor: Colors.yellow,
+        foregroundColor: Colors.black,
       ),
       body: FutureBuilder<List<Approvisionnement>>(
         future: procurementsList,
@@ -45,16 +50,12 @@ class _ApprovisIndexState extends State<ApprovisIndex> {
               itemBuilder: (context, index) {
                 Approvisionnement procurement = snapshot.data![index];
                 return Card(
+                  margin: const EdgeInsets.all(10.0),
                   child: ListTile(
                     title: Text('Approvisionnement ${procurement.invoice}'),
                     subtitle: Text('Quantité: ${procurement.quantity} - Montant: ${procurement.amount}'),
-                    leading: const Icon(Icons.warning),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ApprovDetail(),
-                      ));
-                    },
+                    leading: const Icon(Icons.local_gas_station, color: Colors.black),
+                    onTap: () {},
                   ),
                 );
               },
