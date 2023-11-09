@@ -1,6 +1,10 @@
 import 'package:cars_manager/app_screens/accueil.dart';
+import 'package:cars_manager/app_screens/login.dart';
 import 'package:cars_manager/app_screens/parametre.dart';
+import 'package:cars_manager/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FenetreNavigation extends StatefulWidget {
   const FenetreNavigation({super.key});
@@ -43,15 +47,29 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Parametre',
-                    icon: Icons.settings,
-                    onClicked: () => selectedItem(context, 1),
+                    text: 'Deconnexion',
+                    icon: Icons.logout,
+                    onClicked: () {
+                      // Effacer les donnees de l'utilisateur
+                      currentUser = null;
+                      
+                      // Effacer le token de SharedPreferences
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('access_token'));
+
+                      // Route vers la page de connexion
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ));
+                    },
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Deconnexion',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 2),
+                    text: 'Quiiter l\'application',
+                    icon: Icons.settings,
+                    onClicked: () {
+                      // Quitter l'application
+                      SystemNavigator.pop();
+                    },
                   ),
                 ],
               )
@@ -80,7 +98,7 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const AccueilScreen(),
+          builder: (context) => AccueilScreen(),
         ));
         
         break;
