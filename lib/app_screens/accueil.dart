@@ -2,12 +2,38 @@ import 'package:cars_manager/app_screens/drawer.dart';
 import 'package:cars_manager/app_screens/indexApprovis.dart';
 import 'package:cars_manager/app_screens/indexIncident.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AccueilScreen extends StatelessWidget {
-  const AccueilScreen({super.key});
+
+class AccueilScreen extends StatefulWidget {
+  @override
+  _AccueilScreenState createState() => _AccueilScreenState();
+}
+
+
+class _AccueilScreenState extends State<AccueilScreen> {
+  late String nomPrenom;
+  late String matricule;
+
+  @override
+  void initState() {
+    super.initState();
+    initAsyncOperations();
+  }
+
+  Future<void> initAsyncOperations() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      nomPrenom = prefs.getString('username') ?? 'Aucun utilisateur';
+      matricule = prefs.getString('vehicule_immatriculation') ?? 'Aucun vehicule';
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    // Votre code de construction reste inchangé
     return Scaffold(
       drawer: const FenetreNavigation(),
       appBar: AppBar(
@@ -28,14 +54,14 @@ class AccueilScreen extends StatelessWidget {
                   bottomRight: Radius.circular(40.0),
                 )
               ),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     // Ligne avec les informations de l'utilisateur
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('NOM : ', 
+                      const Text('NOM : ', 
                         style: TextStyle(
                           fontWeight: FontWeight.bold, 
                           fontSize: 24,
@@ -43,21 +69,22 @@ class AccueilScreen extends StatelessWidget {
                           color: Colors.white
                         )
                       ),
-                      Text("MENSAH Luc", 
-                        style: TextStyle(
+                      Text(
+                        nomPrenom,
+                        style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
-                        )
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     // Ligne avec les informations sur le vehicule de l'utilisateur
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Vehicule No : ', 
+                      const Text('Vehicule No : ', 
                         style: TextStyle(
                           fontWeight: FontWeight.bold, 
                           fontSize: 24,
@@ -65,8 +92,9 @@ class AccueilScreen extends StatelessWidget {
                           color: Colors.white
                         )
                       ),
-                      Text("AB-100-AB", 
-                        style: TextStyle(
+                      Text(
+                        matricule, 
+                        style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'Roboto',
                           color: Colors.white
@@ -92,7 +120,8 @@ class AccueilScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[900],
                     ),
-                    onPressed: () {
+                    // Desactiver le bouton si aucun vehicule
+                    onPressed: matricule == 'Aucun vehicule' ? null : () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const IncidentIndex(),
                       ));
@@ -117,11 +146,11 @@ class AccueilScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[900],
                     ),
-                    onPressed: () {
+                    onPressed: matricule == 'Aucun vehicule' ? null : (() {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const ApprovisIndex(),
                       ));
-                    },
+                    }),
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
