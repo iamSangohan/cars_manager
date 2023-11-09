@@ -24,6 +24,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
 
+    // Delay the execution of the function for 2 seconds
+    await Future.delayed(const Duration(seconds: 2));
+
     // Vérifier si le token d'authentification existe
     if (accessToken != null) {
       // Rediriger vers l'écran d'accueil
@@ -41,6 +44,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void dispose() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    
     super.dispose();
   }
 
@@ -50,28 +54,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue, Colors.green],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
+          color: Colors.yellow
         ),
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.car_crash_sharp,
-              size: 80,
-              color: Colors.white,
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Cars Manager',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+            // Ajouter une image comme logo
+            Image(
+              image: AssetImage('assets/images/logo_taxi.png'),
+              width: 300,
+              height: 300,
             ),
           ],
         ),
