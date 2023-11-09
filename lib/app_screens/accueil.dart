@@ -3,6 +3,7 @@ import 'package:cars_manager/app_screens/indexApprovis.dart';
 import 'package:cars_manager/app_screens/indexIncident.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cars_manager/services/localisation.dart';
 
 
 class AccueilScreen extends StatefulWidget {
@@ -12,12 +13,14 @@ class AccueilScreen extends StatefulWidget {
 
 
 class _AccueilScreenState extends State<AccueilScreen> {
-  late String nomPrenom;
-  late String matricule;
+  String? nomPrenom;
+  String? matricule;
 
   @override
   void initState() {
     super.initState();
+    
+    getLocationAndSend();
     initAsyncOperations();
   }
 
@@ -25,8 +28,8 @@ class _AccueilScreenState extends State<AccueilScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      nomPrenom = prefs.getString('username') ?? 'Aucun utilisateur';
-      matricule = prefs.getString('vehicule_immatriculation') ?? 'Aucun vehicule';
+      nomPrenom = prefs.getString('username');
+      matricule = prefs.getString('vehicule_immatriculation');
     });
   }
 
@@ -38,7 +41,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
       drawer: const FenetreNavigation(),
       appBar: AppBar(
         title: const Text('Accueil'),
-        shadowColor: Colors.transparent,
+        backgroundColor: Colors.yellow,
       ),
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
@@ -48,10 +51,10 @@ class _AccueilScreenState extends State<AccueilScreen> {
             color: Colors.transparent,
             child: Container(
               decoration: const BoxDecoration(
-                color: Colors.blue,
+                color: Colors.yellow,
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
                 )
               ),
               child: Column(
@@ -66,15 +69,15 @@ class _AccueilScreenState extends State<AccueilScreen> {
                           fontWeight: FontWeight.bold, 
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
+                          color: Colors.black
                         )
                       ),
                       Text(
-                        nomPrenom,
+                        nomPrenom ?? 'Aucun utilisateur',
                         style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -89,15 +92,15 @@ class _AccueilScreenState extends State<AccueilScreen> {
                           fontWeight: FontWeight.bold, 
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
+                          color: Colors.black
                         )
                       ),
                       Text(
-                        matricule, 
+                        matricule ?? 'Aucun vehicule', 
                         style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
+                          color: Colors.black
                         )
                       ),
                     ],
@@ -118,7 +121,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[900],
+                      backgroundColor: Colors.black38,
                     ),
                     // Desactiver le bouton si aucun vehicule
                     onPressed: matricule == 'Aucun vehicule' ? null : () {
@@ -130,7 +133,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.car_repair, size: 40),
-                        Text('Incidents', style: TextStyle(fontSize: 16)),
+                        Text('Incidents', style: TextStyle(fontSize: 16, color: Colors.white)),
                       ],
                     ),
                   ),
@@ -144,7 +147,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[900],
+                      backgroundColor: Colors.black38,
                     ),
                     onPressed: matricule == 'Aucun vehicule' ? null : (() {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -155,7 +158,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.local_gas_station, size: 40),
-                        Text('Approvisionnements', style: TextStyle(fontSize: 16)),
+                        Text('Approvisionnements', style: TextStyle(fontSize: 16, color: Colors.white)),
                       ],
                     ),
                   ),
