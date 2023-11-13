@@ -1,5 +1,4 @@
 import 'package:cars_manager/app_screens/addIncident.dart';
-import 'package:cars_manager/app_screens/detailIcident.dart';
 import 'package:cars_manager/models/reparation.dart';
 import 'package:cars_manager/services/api.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,6 @@ class _IncidentIndexState extends State<IncidentIndex> {
     // Listview vertical avec un builder
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blue[900],
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const IncidentForm(),

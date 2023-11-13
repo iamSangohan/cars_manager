@@ -1,5 +1,4 @@
 import 'package:cars_manager/app_screens/addApprov.dart';
-import 'package:cars_manager/app_screens/detailApprovis.dart';
 import 'package:cars_manager/models/approvisionnement.dart';
 import 'package:cars_manager/services/api.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,6 @@ class _ApprovisIndexState extends State<ApprovisIndex> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blue[900],
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const ApprovisForm(),
