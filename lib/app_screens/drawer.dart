@@ -1,6 +1,10 @@
 import 'package:cars_manager/app_screens/accueil.dart';
+import 'package:cars_manager/app_screens/login.dart';
 import 'package:cars_manager/app_screens/parametre.dart';
+import 'package:cars_manager/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FenetreNavigation extends StatefulWidget {
   const FenetreNavigation({super.key});
@@ -21,7 +25,7 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
 
     return Drawer(
       child: Material(
-        color: Colors.blue,
+        color: Colors.yellow,
         child: ListView(
           // padding: padding,
           children: <Widget>[
@@ -43,15 +47,33 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Parametre',
-                    icon: Icons.settings,
-                    onClicked: () => selectedItem(context, 1),
+                    text: 'Deconnexion',
+                    icon: Icons.logout,
+                    onClicked: () {
+                      // Effacer les donnees de l'utilisateur
+                      currentUser = null;
+                      
+                      // Effacer toutes les donnees de SharedPreferences
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('username'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('user_id'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('access_token'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('vehicule_immatriculation'));
+                      SharedPreferences.getInstance().then((prefs) => prefs.remove('vehicule_id'));
+
+                      // Route vers la page de connexion
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ));
+                    },
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Deconnexion',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 2),
+                    text: 'Quiiter l\'application',
+                    icon: Icons.settings,
+                    onClicked: () {
+                      // Quitter l'application
+                      SystemNavigator.pop();
+                    },
                   ),
                 ],
               )
@@ -80,7 +102,7 @@ class _FenetreNavigationState extends State<FenetreNavigation> {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const AccueilScreen(),
+          builder: (context) => AccueilScreen(),
         ));
         
         break;

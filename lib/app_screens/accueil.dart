@@ -2,17 +2,46 @@ import 'package:cars_manager/app_screens/drawer.dart';
 import 'package:cars_manager/app_screens/indexApprovis.dart';
 import 'package:cars_manager/app_screens/indexIncident.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cars_manager/services/localisation.dart';
 
-class AccueilScreen extends StatelessWidget {
-  const AccueilScreen({super.key});
+
+class AccueilScreen extends StatefulWidget {
+  @override
+  _AccueilScreenState createState() => _AccueilScreenState();
+}
+
+
+class _AccueilScreenState extends State<AccueilScreen> {
+  String? nomPrenom;
+  String? matricule;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    getLocationAndSend();
+    initAsyncOperations();
+  }
+
+  Future<void> initAsyncOperations() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      nomPrenom = prefs.getString('username');
+      matricule = prefs.getString('vehicule_immatriculation');
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    // Votre code de construction reste inchangé
     return Scaffold(
       drawer: const FenetreNavigation(),
       appBar: AppBar(
         title: const Text('Accueil'),
-        shadowColor: Colors.transparent,
+        backgroundColor: Colors.yellow,
       ),
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
@@ -22,54 +51,56 @@ class AccueilScreen extends StatelessWidget {
             color: Colors.transparent,
             child: Container(
               decoration: const BoxDecoration(
-                color: Colors.blue,
+                color: Colors.yellow,
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50.0),
-                  bottomRight: Radius.circular(50.0),
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
                 )
               ),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     // Ligne avec les informations de l'utilisateur
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('NOM : ', 
+                      const Text('NOM : ', 
                         style: TextStyle(
                           fontWeight: FontWeight.bold, 
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
+                          color: Colors.black
                         )
                       ),
-                      Text("MENSAH Luc", 
-                        style: TextStyle(
+                      Text(
+                        nomPrenom ?? 'Aucun utilisateur',
+                        style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
-                        )
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     // Ligne avec les informations sur le vehicule de l'utilisateur
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Vehicule No : ', 
+                      const Text('Vehicule No : ', 
                         style: TextStyle(
                           fontWeight: FontWeight.bold, 
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
+                          color: Colors.black
                         )
                       ),
-                      Text("AB-100-AB", 
-                        style: TextStyle(
+                      Text(
+                        matricule ?? 'Aucun vehicule', 
+                        style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'Roboto',
-                          color: Colors.white
+                          color: Colors.black
                         )
                       ),
                     ],
@@ -90,9 +121,10 @@ class AccueilScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[900],
+                      backgroundColor: Colors.black38,
                     ),
-                    onPressed: () {
+                    // Desactiver le bouton si aucun vehicule
+                    onPressed: matricule == 'Aucun vehicule' ? null : () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const IncidentIndex(),
                       ));
@@ -101,7 +133,7 @@ class AccueilScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.car_repair, size: 40),
-                        Text('Incidents', style: TextStyle(fontSize: 16)),
+                        Text('Incidents', style: TextStyle(fontSize: 16, color: Colors.white)),
                       ],
                     ),
                   ),
@@ -115,18 +147,18 @@ class AccueilScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[900],
+                      backgroundColor: Colors.black38,
                     ),
-                    onPressed: () {
+                    onPressed: matricule == 'Aucun vehicule' ? null : (() {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const ApprovisIndex(),
                       ));
-                    },
+                    }),
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.local_gas_station, size: 40),
-                        Text('Approvisionnements', style: TextStyle(fontSize: 16)),
+                        Text('Approvisionnements', style: TextStyle(fontSize: 16, color: Colors.white)),
                       ],
                     ),
                   ),
